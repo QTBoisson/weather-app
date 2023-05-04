@@ -86,17 +86,6 @@ interface MiniWeatherCardData{
     id:number
 }
 
-export function getWindDirection(angleEnDegres?:number) : string{
-    if(angleEnDegres || angleEnDegres === 0) {
-        let directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW','N'];
-        let angleCalcul = angleEnDegres + 22.5;
-        let index = Math.round(angleEnDegres / 45) % 8;
-        return directions[index];
-    } else {
-        return ""
-    }
-}
-
 export default function App() {
 
     const [postCode,setPostCode] = useState('')
@@ -192,13 +181,87 @@ export default function App() {
         })
     }
 
+    const getWindDirection = (angleEnDegres?:number): string => {
+        if(angleEnDegres || angleEnDegres === 0) {
+            let directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW','N'];
+            let angleCalcul = angleEnDegres + 22.5;
+            let index = Math.round(angleEnDegres / 45) % 8;
+            return directions[index];
+        } else {
+            return ""
+        }
+    }
+
+    const traduireCodeMeteo = (codeMeteo?: number): string => {
+        switch (codeMeteo) {
+            case 0:
+                return "Ciel dégagé";
+            case 1:
+                return "Ciel principalement dégagé";
+            case 2:
+                return "Partiellement nuageux";
+            case 3:
+                return "Couvert";
+            case 45:
+                return "Brouillard";
+            case 48:
+                return "Brouillard givrant";
+            case 51:
+                return "Bruine légère";
+            case 53:
+                return "Bruine modérée";
+            case 55:
+                return "Bruine forte";
+            case 56:
+                return "Bruine verglaçante légère";
+            case 57:
+                return "Bruine verglaçante forte";
+            case 61:
+                return "Pluie légère";
+            case 63:
+                return "Pluie modérée";
+            case 65:
+                return "Pluie forte";
+            case 66:
+                return "Pluie verglaçante légère";
+            case 67:
+                return "Pluie verglaçante forte";
+            case 71:
+                return "Neige légère";
+            case 73:
+                return "Neige modérée";
+            case 75:
+                return "Neige forte";
+            case 77:
+                return "Grésil";
+            case 80:
+                return "Averses de pluie légères";
+            case 81:
+                return "Averses de pluie modérées";
+            case 82:
+                return "Averses de pluie violentes";
+            case 85:
+                return "Averses de neige légères";
+            case 86:
+                return "Averses de neige fortes";
+            case 95:
+                return "Orage léger ou modéré";
+            case 96:
+                return "Orage avec grêle légère";
+            case 99:
+                return "Orage avec grêle forte";
+            default:
+                return "Condition météo inconnue";
+        }
+    }
+
   return (
     <div className="App">
 
       <h1>WEATHER REPORT</h1>
 
         <div className="searchBar">
-            <TextField id="postCodeInput" label="Code postal" variant="outlined"
+            <TextField id="postCodeInput" label="Code postal" variant="outlined" size="small"
                        value={postCode} onChange={handlePostCodeChange}
                        error={searchErrorMsg.length>0} helperText={searchErrorMsg}
                        />
@@ -210,6 +273,8 @@ export default function App() {
                                     focusedWeatherData={focusedWeatherCardData?.focusedWeatherData}
                                     focusedCityData={focusedWeatherCardData?.focusedCityData}
                                     cityAddHandler={handleCityAdd}
+                                    getWindDirection={getWindDirection}
+                                    weatherCodeTraduction={traduireCodeMeteo}
                                     imgLink={focusedWeatherCardData?.imgLink}
                                     addButtonDisabled={focusedWeatherCardData?.addButtonDisabled}/>
         </div>
@@ -222,6 +287,8 @@ export default function App() {
                                          miniCityData={cardData.miniCityData}
                                          miniWeatherData={cardData.miniWeatherData}
                                          imgLink={cardData.imgLink}
+                                         getWindDirection={getWindDirection}
+                                         weatherCodeTraduction={traduireCodeMeteo}
                                          cityRemoveHandler={handleCityRemove}
                                          cityClickHandler={handleMiniCityClick}
                                          key={cardData.id} />
@@ -231,72 +298,13 @@ export default function App() {
 
     </div>
   );
+
+
 }
 
 
 
-export function traduireCodeMeteo(codeMeteo?: number): string {
-    switch (codeMeteo) {
-        case 0:
-            return "Ciel dégagé";
-        case 1:
-            return "Ciel principalement dégagé";
-        case 2:
-            return "Partiellement nuageux";
-        case 3:
-            return "Couvert";
-        case 45:
-            return "Brouillard";
-        case 48:
-            return "Brouillard givrant";
-        case 51:
-            return "Bruine légère";
-        case 53:
-            return "Bruine modérée";
-        case 55:
-            return "Bruine forte";
-        case 56:
-            return "Bruine verglaçante légère";
-        case 57:
-            return "Bruine verglaçante forte";
-        case 61:
-            return "Pluie légère";
-        case 63:
-            return "Pluie modérée";
-        case 65:
-            return "Pluie forte";
-        case 66:
-            return "Pluie verglaçante légère";
-        case 67:
-            return "Pluie verglaçante forte";
-        case 71:
-            return "Neige légère";
-        case 73:
-            return "Neige modérée";
-        case 75:
-            return "Neige forte";
-        case 77:
-            return "Grésil";
-        case 80:
-            return "Averses de pluie légères";
-        case 81:
-            return "Averses de pluie modérées";
-        case 82:
-            return "Averses de pluie violentes";
-        case 85:
-            return "Averses de neige légères";
-        case 86:
-            return "Averses de neige fortes";
-        case 95:
-            return "Orage léger ou modéré";
-        case 96:
-            return "Orage avec grêle légère";
-        case 99:
-            return "Orage avec grêle forte";
-        default:
-            return "Condition météo inconnue";
-    }
-}
+
 
 
 
