@@ -33,6 +33,7 @@ export interface WeatherData {
     hourly: {
         "time": string[],
         "temperature_2m": number[],
+        "apparent_temperature":number[],
         "precipitation_probability": number[],
         "precipitation": number[],
         "weathercode": number[],
@@ -110,7 +111,7 @@ export default function App() {
                 .then(currentCityData => {
                     if(currentCityData.length>0){
                         let currentCoordinates = currentCityData[0].centre.coordinates
-                        fetch(`https://api.open-meteo.com/v1/forecast?longitude=${currentCoordinates[0]}&latitude=${currentCoordinates[1]}&hourly=temperature_2m,precipitation_probability,precipitation,weathercode,windspeed_10m,winddirection_10m&daily=weathercode,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,precipitation_sum,precipitation_hours&current_weather=true&forecast_days=4&timezone=auto`)
+                        fetch(`https://api.open-meteo.com/v1/forecast?longitude=${currentCoordinates[0]}&latitude=${currentCoordinates[1]}&hourly=temperature_2m,apparent_temperature,precipitation_probability,precipitation,weathercode,windspeed_10m,winddirection_10m&daily=weathercode,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,precipitation_sum,precipitation_hours&current_weather=true&forecast_days=4&timezone=auto`)
                             .then(response => response.json())
                             .then(currentWeatherData => {
                                 setFocusedWeatherCardData({

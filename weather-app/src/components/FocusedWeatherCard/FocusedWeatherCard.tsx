@@ -74,12 +74,12 @@ export default function FocusedWeatherCard(props:FocusedWeatherCardProps){
                     />
                     <CardContent >
 
-                        <Typography gutterBottom variant="h5" component="div">
+                        <Typography gutterBottom variant="h5" component="div" sx={{marginBottom:2,marginTop:0.5}}>
                             {props.focusedCityData ? `${props.focusedCityData.nom} (${props.focusedPostCode})` : ""}
                         </Typography>
 
                         <div style={{display:"flex", gap:"1rem", justifyContent:"space-evenly"}}>
-                            <div style={{display:"flex",justifyContent:"center", gap:"1rem", flexDirection:"column"}}>
+                            <div style={{display:"flex",justifyContent:"center", gap:"1rem", flexDirection:"column", width:200}}>
                                 <div className="CurrentWeatherContainer">
                                     <Typography variant="body1">
                                         Actuellement :
@@ -88,7 +88,7 @@ export default function FocusedWeatherCard(props:FocusedWeatherCardProps){
                                         {traduireCodeMeteo(props.focusedWeatherData?.current_weather.weathercode)}
                                     </Typography>
                                     <Typography variant="body2" color="text.secondary">
-                                        Température : {props.focusedWeatherData?.current_weather.temperature}°C
+                                        {props.focusedWeatherData?.current_weather.temperature}°C / {props.focusedWeatherData?.hourly.apparent_temperature[hourlyStartIndex]}°C ressentis
                                     </Typography>
                                     <Typography variant="body2" color="text.secondary">
                                         Vent : {props.focusedWeatherData?.current_weather.windspeed}km/h {getWindDirection(props.focusedWeatherData?.current_weather.winddirection)}
@@ -110,14 +110,14 @@ export default function FocusedWeatherCard(props:FocusedWeatherCardProps){
                                     </Typography>
                                     <Typography variant="body2" color="text.secondary">
                                         {props.focusedWeatherData?.daily.precipitation_sum[0] === 0 ?
-                                            "Aucune précipitation" :
+                                            "Précipitations : < 0,1mm" :
                                             `Précipitations : ${props.focusedWeatherData?.daily.precipitation_sum[0]}mm en ${props.focusedWeatherData?.daily.precipitation_hours[0]}h`}
                                     </Typography>
 
                                 </div>
                             </div>
 
-                            <div>
+                            <div style={{width:200}}>
                                 <div className="HourlyWeatherContainer">
                                     <TextField type="number" size="small" sx={{width:115}} label={`Dans ${hoursPrevision} heures`}
                                                value={hoursPrevision} onChange={handleHoursChanged}/>
@@ -125,14 +125,17 @@ export default function FocusedWeatherCard(props:FocusedWeatherCardProps){
                                         {traduireCodeMeteo(props.focusedWeatherData?.hourly.weathercode[hourlyStartIndex+hoursPrevision])}
                                     </Typography>
                                     <Typography variant="body2" color="text.secondary">
-                                        Température : {props.focusedWeatherData?.hourly.temperature_2m[hourlyStartIndex+hoursPrevision]}°C
+                                        {props.focusedWeatherData?.hourly.temperature_2m[hourlyStartIndex+hoursPrevision]}°C / {props.focusedWeatherData?.hourly.apparent_temperature[hourlyStartIndex+hoursPrevision]}°C ressentis
                                     </Typography>
                                     <Typography variant="body2" color="text.secondary">
                                         Vent : {props.focusedWeatherData?.hourly.windspeed_10m[hourlyStartIndex+hoursPrevision]}km/h {getWindDirection(props.focusedWeatherData?.hourly.winddirection_10m[hourlyStartIndex+hoursPrevision])}
                                     </Typography>
                                     <Typography variant="body2" color="text.secondary">
+                                        {`${props.focusedWeatherData?.hourly.precipitation_probability[hourlyStartIndex+hoursPrevision]}% de chances de précipitation`}
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary">
                                         {props.focusedWeatherData?.hourly.precipitation[hourlyStartIndex+hoursPrevision] === 0 ?
-                                            "Aucune précipitation" :
+                                            "Précipitations : < 0,1mm" :
                                             `Précipitations : ${props.focusedWeatherData?.hourly.precipitation[hourlyStartIndex+hoursPrevision]}mm`}
                                     </Typography>
                                 </div>
